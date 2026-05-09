@@ -33,6 +33,10 @@ Each skill picks up where the previous one left off using the files produced alo
 `docs/requirements.md`, `docs/entity_model.md`, `docs/use_cases.puml`, `docs/use_cases/UC-*.md`). At any point you can
 inspect or manually edit these files before continuing.
 
+**Inheriting a legacy codebase?** Start with `/reverse-engineer` — it walks the existing code, configuration, and
+schema and produces the same `docs/use_cases.puml`, `docs/use_cases/UC-*.md`, and `docs/entity_model.md` artifacts the
+forward workflow would have produced, giving you a documented baseline to work from.
+
 |                      | Inception       | Elaboration                            | Construction                                                                | Transition |
 |----------------------|-----------------|----------------------------------------|-----------------------------------------------------------------------------|------------|
 | **aiup-core**        | `/requirements` | `/entity-model`<br>`/use-case-diagram` | `/use-case-spec`                                                            |            |
@@ -374,6 +378,35 @@ requirements catalog.
 
 **Input:** Use case ID(s) as argument
 **Output:** `docs/use_cases/UC-XXX-*.md` (one file per use case)
+**Plugin:** `aiup-core`
+
+---
+
+### `/reverse-engineer` — Reverse Engineer Existing Project
+
+**Purpose:** Recovers AIUP artifacts (use case diagram, per-use-case specifications, entity model) from an existing
+codebase so legacy projects can join the AIUP workflow without rewriting documentation by hand.
+
+**Usage:**
+
+```
+/reverse-engineer
+```
+
+**What it does:**
+
+1. Detects the stack and locates entry points (controllers, routes, view classes), the data layer (ORM models or
+   schema migrations), and authentication/authorization configuration
+2. Identifies actors from role/authority definitions, authentication boundaries, and external system integrations
+3. Groups entry points by user goal — not one use case per HTTP endpoint — and assigns stable IDs (`UC-001`, `UC-002`, …)
+4. Writes a PlantUML use case diagram, one specification document per use case, and an entity model with a Mermaid ER
+   diagram, all in the exact formats produced by `/use-case-diagram`, `/use-case-spec`, and `/entity-model`
+5. Cross-validates that the three documents agree (every actor has a spec, every UC ID has a file, every entity
+   referenced in a spec exists in the model)
+6. Reports gaps honestly — endpoints it couldn't classify, use cases where the success scenario was hard to recover
+
+**Input:** Existing source tree
+**Output:** `docs/use_cases.puml`, `docs/use_cases/UC-XXX-*.md`, `docs/entity_model.md`
 **Plugin:** `aiup-core`
 
 ---

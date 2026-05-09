@@ -22,6 +22,7 @@ marketplace/
 │   └── skills/                   # All workflow steps as skills (slash commands)
 │       ├── requirements/
 │       ├── entity-model/
+│       ├── reverse-engineer/
 │       ├── use-case-diagram/
 │       └── use-case-spec/
 ├── aiup-vaadin-jooq/             # Vaadin + jOOQ technology stack plugin
@@ -62,19 +63,28 @@ Skills follow the AI Unified Process phases: Inception, Elaboration, Constructio
 
 ### Core (stack-agnostic)
 
-| Phase        | Skill (slash command) | Description                            |
-|--------------|-----------------------|----------------------------------------|
-| Inception    | `/requirements`       | Generate requirements from vision      |
-| Elaboration  | `/entity-model`       | Create entity model with Mermaid ER    |
-| Elaboration  | `/use-case-diagram`   | Generate PlantUML use case diagrams    |
-| Construction | `/use-case-spec`      | Write detailed use case specifications |
+| Phase        | Skill (slash command) | Description                                                          |
+|--------------|-----------------------|----------------------------------------------------------------------|
+| Inception    | `/requirements`       | Generate requirements from vision                                    |
+| Elaboration  | `/entity-model`       | Create entity model with Mermaid ER                                  |
+| Elaboration  | `/use-case-diagram`   | Generate PlantUML use case diagrams                                  |
+| Construction | `/use-case-spec`      | Write detailed use case specifications                               |
+| Any          | `/reverse-engineer`   | Recover use case diagram, use case specs, and entity model from code |
+| Construction | `/implement`          | Stack-agnostic dispatcher — detects the stack and delegates          |
+| Construction | `/test`               | Stack-agnostic dispatcher — server-side unit / integration tests     |
+| Construction | `/e2e`                | Stack-agnostic dispatcher — browser-based end-to-end tests           |
 
-### Vaadin/jOOQ (stack-specific)
+### Vaadin/jOOQ (stack-specific — invoked by the core dispatchers)
 
-| Phase        | Skill (slash command) | Description                               |
-|--------------|-----------------------|-------------------------------------------|
-| Construction | `/flyway-migration`   | Create Flyway migrations                                 |
-| Construction | `/implement`          | Implement use cases using Vaadin and jOOQ                |
-| Construction | `/browserless-test`   | Create Vaadin Browserless unit tests (recommended)       |
-| Construction | `/karibu-test`        | Create Karibu unit tests (legacy — superseded since 25.1) |
-| Construction | `/playwright-test`    | Create Playwright integration tests                      |
+| Phase        | Skill (slash command)     | Description                                                |
+|--------------|---------------------------|------------------------------------------------------------|
+| Construction | `/flyway-migration`       | Create Flyway migrations                                   |
+| Construction | `/implement-vaadin-jooq`  | Implement use cases using Vaadin and jOOQ                  |
+| Construction | `/browserless-test`       | Create Vaadin Browserless unit tests (recommended)         |
+| Construction | `/karibu-test`            | Create Karibu unit tests (legacy — superseded since 25.1)  |
+| Construction | `/playwright-test`        | Create Playwright integration tests                        |
+
+The core `/implement`, `/test`, and `/e2e` skills inspect the project's build files (`pom.xml`, `build.gradle`,
+`package.json`, etc.) to choose which stack-specific skill to invoke. New stack plugins (e.g. a future
+`aiup-spring-react`) plug in by shipping their own `implement-<stack>` and test skills and adding a row to each
+dispatcher's routing table.

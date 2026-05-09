@@ -53,7 +53,7 @@
 | Status      | Description                                      |
 |-------------|--------------------------------------------------|
 | Draft       | Initial version, still being written.            |
-| Review      | Complete, awaiting stakeholder review.           |
+| Reviewed    | Complete, awaiting stakeholder review.           |
 | Approved    | Reviewed and approved for implementation.        |
 | Implemented | Implementation complete, pending testing.        |
 | Tested      | All tests pass, pending final acceptance.        |
