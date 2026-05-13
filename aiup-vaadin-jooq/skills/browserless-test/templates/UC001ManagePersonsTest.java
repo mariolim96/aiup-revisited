@@ -3,6 +3,7 @@ package com.example.app.views;
 import java.time.LocalDate;
 import java.util.Set;
 
+import com.example.app.usecase.UseCase;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
@@ -17,20 +18,29 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * Use case test for UC-001 "Manage Persons".
+ *
+ * <p>Class name follows the AIUP convention {@code UC<id><PascalCaseUseCaseName>Test}; every test
+ * method is annotated with {@link UseCase} so the AIUP IntelliJ Navigator plugin can link this
+ * file to {@code docs/use-cases/UC-001-manage-persons.md}.
+ */
 @SpringBootTest
-class ExampleViewTest extends SpringBrowserlessTest {
+class UC001ManagePersonsTest extends SpringBrowserlessTest {
 
     @Test
+    @UseCase(id = "UC-001")
     void view_displays_grid_with_data() {
-        navigate(ExampleView.class);
+        navigate(ManagePersonsView.class);
 
         Grid<PersonRecord> grid = $(Grid.class).single();
         assertThat(test(grid).size()).isGreaterThan(0);
     }
 
     @Test
+    @UseCase(id = "UC-001")
     void grid_row_can_be_selected() {
-        navigate(ExampleView.class);
+        navigate(ManagePersonsView.class);
 
         Grid<PersonRecord> grid = $(Grid.class).single();
         assertThat(test(grid).size()).isEqualTo(100);
@@ -47,8 +57,9 @@ class ExampleViewTest extends SpringBrowserlessTest {
     }
 
     @Test
-    void click_button_shows_notification() {
-        navigate(ExampleView.class);
+    @UseCase(id = "UC-001")
+    void saving_a_person_shows_notification() {
+        navigate(ManagePersonsView.class);
 
         test($(Button.class).withText("Save").single()).click();
 
@@ -57,8 +68,9 @@ class ExampleViewTest extends SpringBrowserlessTest {
     }
 
     @Test
+    @UseCase(id = "UC-001")
     void form_submission_creates_record() {
-        navigate(ExampleView.class);
+        navigate(ManagePersonsView.class);
 
         test($(TextField.class).withCaption("Name").single()).setValue("Test Name");
         test($(ComboBox.class).withCaption("Country").single()).selectItem("Switzerland");
@@ -72,8 +84,9 @@ class ExampleViewTest extends SpringBrowserlessTest {
     }
 
     @Test
+    @UseCase(id = "UC-001", scenario = "A1: Required Field Missing", businessRules = {"BR-002"})
     void required_field_shows_validation_error() {
-        navigate(ExampleView.class);
+        navigate(ManagePersonsView.class);
 
         TextField nameField = $(TextField.class).withCaption("Name").single();
         test(nameField).clear();
@@ -84,8 +97,9 @@ class ExampleViewTest extends SpringBrowserlessTest {
     }
 
     @Test
+    @UseCase(id = "UC-001", scenario = "A2: Delete Confirmation")
     void delete_confirms_via_dialog() {
-        navigate(ExampleView.class);
+        navigate(ManagePersonsView.class);
 
         Grid<PersonRecord> grid = $(Grid.class).single();
         grid.select(test(grid).getRow(0));

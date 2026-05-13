@@ -21,6 +21,76 @@ Create Karibu unit tests for Vaadin views based on the use case $ARGUMENTS. Kari
 
 Use the KaribuTesting MCP server for documentation and code generation.
 
+## Test Class Naming and `@UseCase` Annotation
+
+Karibu tests are **use case tests**. Each test class verifies the behavior of exactly one use case
+from the use case specification (`docs/use-cases/UC-XXX-*.md`).
+
+### Class naming
+
+Test classes must be named after the use case using the pattern
+`UC<id><PascalCaseUseCaseName>Test` — for example `UC001RegisterPersonTest` for use case UC-001
+"Register Person". This is the convention the AIUP IntelliJ Navigator plugin relies on to link
+specs and tests.
+
+### `@UseCase` annotation
+
+Every test method must be annotated with `@UseCase(id = "UC-XXX", ...)` so the
+[AIUP IntelliJ Navigator plugin](https://github.com/AI-Unified-Process/intellij-plugin) can wire up
+gutter icons and Find Usages between the Markdown spec and the Java tests.
+
+**Bootstrap step.** Before writing any tests, check whether the project already contains an
+annotation type named `UseCase` (search the project for `@interface UseCase`). If it does not,
+create it. The package does not matter — the plugin resolves the annotation by short name — but a
+conventional location is `src/main/java/<group>/<artifact>/usecase/UseCase.java`. The annotation
+must have exactly this shape:
+
+```java
+package com.example.app.usecase;
+
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+public @interface UseCase {
+    String id();
+
+    String scenario() default "Main Success Scenario";
+
+    String[] businessRules() default {};
+}
+```
+
+### Usage on test methods
+
+Annotate each test method with the use case ID and (when applicable) the scenario and business
+rules it covers. The values must match headings in the corresponding `UC-XXX-*.md` spec:
+
+| Attribute       | Maps to spec heading                       | Default                  |
+|-----------------|--------------------------------------------|--------------------------|
+| `id`            | `**Use Case ID:** UC-XXX`                  | (required)               |
+| `scenario`      | `## Main Success Scenario` or `### A1: …`  | `"Main Success Scenario"` |
+| `businessRules` | `### BR-XXX` headings inside the same UC   | `{}`                     |
+
+```java
+@Test
+@UseCase(id = "UC-001")
+void register_person_with_valid_data() { ... }
+
+@Test
+@UseCase(id = "UC-001", scenario = "A1: Email Already Exists")
+void registration_fails_when_email_already_exists() { ... }
+
+@Test
+@UseCase(id = "UC-001", scenario = "A2: Invalid Postal Code", businessRules = {"BR-003"})
+void registration_fails_when_postal_code_invalid() { ... }
+```
+
 ## DO NOT
 
 - Use Mockito for mocking
@@ -49,7 +119,10 @@ Create test data using Flyway migrations in `src/test/resources/db/migration`.
 
 ## Template
 
-Use [templates/ExampleViewTest.java](templates/ExampleViewTest.java) as the test class structure.
+Use [templates/UC001ManagePersonsTest.java](templates/UC001ManagePersonsTest.java) as the test
+class structure. It demonstrates the `UC<id><Name>Test` class naming, the `@UseCase` annotation on
+every test method, and how to map alternative flows (`scenario = "A1: …"`) and business rules
+(`businessRules = {"BR-…"}`) onto the spec headings.
 
 ## Common Patterns
 
@@ -142,23 +215,29 @@ Use AssertJ or Karibu Testing assertions:
 
 ## Workflow
 
-1. Read the use case specification
-2. Use TodoWrite to create a task for each test scenario
-3. Create test class using the template
-4. For each test:
+1. Read the use case specification (`docs/use-cases/UC-XXX-*.md`) to identify the main success
+   scenario, alternative flows (A1, A2, …), and referenced business rules (BR-XXX)
+2. Check whether a `UseCase` annotation type already exists in the project. If not, create
+   `UseCase.java` with the canonical shape shown above
+3. Use TodoWrite to create a task for each test scenario (one task per scenario / alternative flow)
+4. Create the test class named `UC<id><PascalCaseUseCaseName>Test` using the template
+5. For each test method:
+    - Annotate with `@UseCase(id = "UC-XXX", scenario = "…", businessRules = {"BR-…"})`
+      mirroring the spec headings
     - Navigate to the view
     - Find components using LocatorJ
     - Perform interactions
     - Assert expected outcomes
-    - Clean up test data if created during test
-5. Run tests to verify they pass
-6. If a test fails:
+    - Clean up test data if created during the test
+6. Run tests to verify they pass
+7. If a test fails:
     - Check component locators with `_dump()` to inspect the component tree
     - Verify test data exists in the Flyway test migrations
     - Ensure navigation to the correct view before finding components
-7. Mark todos complete
+8. Mark todos complete
 
 ## Resources
 
 - Karibu Testing documentation: https://github.com/mvysny/karibu-testing/tree/master/karibu-testing-v10
+- AIUP IntelliJ Navigator plugin (defines the `@UseCase` annotation contract): https://github.com/AI-Unified-Process/intellij-plugin
 - Use the KaribuTesting MCP server for additional patterns

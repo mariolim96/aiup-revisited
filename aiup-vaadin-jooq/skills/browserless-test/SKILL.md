@@ -20,6 +20,76 @@ Browserless Testing is the **official, recommended** server-side testing framewo
 
 Use the Vaadin MCP server for documentation lookups.
 
+## Test Class Naming and `@UseCase` Annotation
+
+Browserless tests are **use case tests**. Each test class verifies the behavior of exactly one use
+case from the use case specification (`docs/use-cases/UC-XXX-*.md`).
+
+### Class naming
+
+Test classes must be named after the use case using the pattern
+`UC<id><PascalCaseUseCaseName>Test` — for example `UC001RegisterPersonTest` for use case UC-001
+"Register Person". This makes the link between spec and test obvious and is the convention the AIUP
+IntelliJ Navigator plugin relies on.
+
+### `@UseCase` annotation
+
+Every test method must be annotated with `@UseCase(id = "UC-XXX", ...)` so the
+[AIUP IntelliJ Navigator plugin](https://github.com/AI-Unified-Process/intellij-plugin) can wire up
+gutter icons and Find Usages between the Markdown spec and the Java tests.
+
+**Bootstrap step.** Before writing any tests, check whether the project already contains an
+annotation type named `UseCase` (search the project for `@interface UseCase`). If it does not,
+create it. The package does not matter — the plugin resolves the annotation by short name — but a
+conventional location is `src/main/java/<group>/<artifact>/usecase/UseCase.java`. The annotation
+must have exactly this shape:
+
+```java
+package com.example.app.usecase;
+
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+public @interface UseCase {
+    String id();
+
+    String scenario() default "Main Success Scenario";
+
+    String[] businessRules() default {};
+}
+```
+
+### Usage on test methods
+
+Annotate each test method with the use case ID and (when applicable) the scenario and business
+rules it covers. The values must match headings in the corresponding `UC-XXX-*.md` spec:
+
+| Attribute       | Maps to spec heading                       | Default                  |
+|-----------------|--------------------------------------------|--------------------------|
+| `id`            | `**Use Case ID:** UC-XXX`                  | (required)               |
+| `scenario`      | `## Main Success Scenario` or `### A1: …`  | `"Main Success Scenario"` |
+| `businessRules` | `### BR-XXX` headings inside the same UC   | `{}`                     |
+
+```java
+@Test
+@UseCase(id = "UC-001")
+void register_person_with_valid_data() { ... }
+
+@Test
+@UseCase(id = "UC-001", scenario = "A1: Email Already Exists")
+void registration_fails_when_email_already_exists() { ... }
+
+@Test
+@UseCase(id = "UC-001", scenario = "A2: Invalid Postal Code", businessRules = {"BR-003"})
+void registration_fails_when_postal_code_invalid() { ... }
+```
+
 ## Maven Dependency
 
 ```xml
@@ -65,7 +135,10 @@ For non-Spring projects, extend `com.vaadin.testbench.unit.BrowserlessTest` inst
 
 ## Template
 
-Use [templates/ExampleViewTest.java](templates/ExampleViewTest.java) as the test class structure.
+Use [templates/UC001ManagePersonsTest.java](templates/UC001ManagePersonsTest.java) as the test
+class structure. It demonstrates the `UC<id><Name>Test` class naming, the `@UseCase` annotation on
+every test method, and how to map alternative flows (`scenario = "A1: …"`) and business rules
+(`businessRules = {"BR-…"}`) onto the spec headings.
 
 ## Common Patterns
 
@@ -247,22 +320,28 @@ Use AssertJ for assertions; read state from component APIs, not from `test(...)`
 
 ## Workflow
 
-1. Read the use case specification
-2. Use TodoWrite to create a task for each test scenario
-3. Create the test class using the template (extend `SpringBrowserlessTest`, annotate `@SpringBootTest`)
-4. For each test:
+1. Read the use case specification (`docs/use-cases/UC-XXX-*.md`) to identify the main success
+   scenario, alternative flows (A1, A2, …), and referenced business rules (BR-XXX)
+2. Check whether a `UseCase` annotation type already exists in the project. If not, create
+   `UseCase.java` with the canonical shape shown above
+3. Use TodoWrite to create a task for each test scenario (one task per scenario / alternative flow)
+4. Create the test class named `UC<id><PascalCaseUseCaseName>Test`, extending
+   `SpringBrowserlessTest` and annotated `@SpringBootTest`
+5. For each test method:
+    - Annotate with `@UseCase(id = "UC-XXX", scenario = "…", businessRules = {"BR-…"})`
+      mirroring the spec headings
     - Navigate to the view with `navigate(...)`
     - Find components with `$()` / `$view()`
     - Perform interactions through `test(component)`
     - Assert outcomes against the component's Java API
     - Clean up test data if created during the test
-5. Run tests to verify they pass
-6. If a test fails:
+6. Run tests to verify they pass
+7. If a test fails:
     - Use `$()...exists()` to verify the component is in the tree
     - Use `getCurrentView()` to confirm navigation succeeded
     - Verify test data exists in the Flyway test migrations
     - For overlay components, use the dedicated tester (`ContextMenuTester`, `MenuBarTester`) — `$()` won't see them
-7. Mark todos complete
+8. Mark todos complete
 
 ## Resources
 
@@ -270,4 +349,5 @@ Use AssertJ for assertions; read state from component APIs, not from `test(...)`
 - Getting started: https://vaadin.com/docs/latest/flow/testing/browserless/getting-started
 - Component query API: https://vaadin.com/docs/latest/flow/testing/browserless/component-query
 - Component testers: https://vaadin.com/docs/latest/flow/testing/browserless/component-testers
+- AIUP IntelliJ Navigator plugin (defines the `@UseCase` annotation contract): https://github.com/AI-Unified-Process/intellij-plugin
 - Use the Vaadin MCP server for additional patterns
