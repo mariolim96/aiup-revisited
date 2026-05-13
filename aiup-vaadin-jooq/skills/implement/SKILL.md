@@ -20,6 +20,7 @@ Check the Vaadin and jOOQ MCP servers for guidance.
 ## DO NOT
 
 - Create test classes (use dedicated testing skills instead)
+- Use `fetchInto(SomeDto.class)` for projected queries — use `Records.mapping(SomeDto::new)` instead
 
 ## Workflow
 
@@ -31,6 +32,46 @@ Check the Vaadin and jOOQ MCP servers for guidance.
 6. Implement the Vaadin view following existing patterns
 7. Wire up the view with the data access layer
 8. Verify the full implementation compiles successfully
+
+## jOOQ result mapping
+
+When a query projects columns into a DTO, Java `record`, or any immutable class,
+map the result with `org.jooq.Records.mapping(...)` and a constructor reference.
+Do **not** use `fetchInto(Dto.class)` — it uses reflection and is not checked
+against the projection at compile time.
+
+```java
+import org.jooq.Records;
+
+// List
+List<PersonDto> persons = ctx
+    .select(PERSON.ID, PERSON.FIRST_NAME, PERSON.LAST_NAME, PERSON.EMAIL)
+    .from(PERSON)
+    .fetch(Records.mapping(PersonDto::new));
+
+// Single (optional) row
+Optional<PersonDto> person = ctx
+    .select(PERSON.ID, PERSON.FIRST_NAME, PERSON.LAST_NAME, PERSON.EMAIL)
+    .from(PERSON)
+    .where(PERSON.ID.eq(id))
+    .fetchOptional(Records.mapping(PersonDto::new));
+
+// Stream
+try (Stream<PersonDto> stream = ctx
+        .select(PERSON.ID, PERSON.FIRST_NAME, PERSON.LAST_NAME, PERSON.EMAIL)
+        .from(PERSON)
+        .fetchStream()
+        .map(Records.mapping(PersonDto::new))) {
+    ...
+}
+```
+
+The order of the projected columns must match the constructor parameter order
+of the target type — the compiler will enforce this.
+
+Exception: when fetching a generated table record without projection
+(`ctx.selectFrom(PERSON).fetchInto(Person.class)` using the generator-produced
+POJO), the generated `into` mapper is fine.
 
 ## Resources
 
