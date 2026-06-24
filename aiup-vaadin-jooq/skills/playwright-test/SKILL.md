@@ -46,7 +46,7 @@ Use existing test data from Flyway migrations in `src/test/resources/db/migratio
 
 ## Template
 
-Use [templates/ExampleViewIT.java](templates/ExampleViewIT.java) as the starting point for new test classes.
+Use [references/ExampleViewIT.java](references/ExampleViewIT.java) as the starting point for new test classes.
 
 ## Locating Components
 

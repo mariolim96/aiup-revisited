@@ -166,7 +166,7 @@ Create `docs/use_cases/` and write one file per use case named
   …; renumber globally across use cases so each rule has a unique ID.
 
 The full template lives at the `/use-case-spec` skill —
-[skills/use-case-spec/templates/use-case.md](../use-case-spec/templates/use-case.md)
+[skills/use-case-spec/references/use-case.md](../use-case-spec/references/use-case.md)
 inside this plugin.
 
 #### Step writing — what to keep at the business level

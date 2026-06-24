@@ -73,7 +73,7 @@ Defines categories of rooms with shared characteristics.
 
 ## Reference
 
-See [REFERENCE.md](REFERENCE.md) for the allowed Validation Rules values (never leave the column empty)
+See [references/REFERENCE.md](references/REFERENCE.md) for the allowed Validation Rules values (never leave the column empty)
 and the Data Types with their Length/Precision conventions.
 
 ## Multi-Column Constraints
@@ -98,4 +98,4 @@ If validation spans multiple columns, add after the table:
     - Every attribute table has exactly 5 columns
     - No attributes appear inside the Mermaid diagram entity blocks
     - All foreign keys reference existing entities
-    - All validation rules use values from [REFERENCE.md](REFERENCE.md)
+    - All validation rules use values from [references/REFERENCE.md](references/REFERENCE.md)

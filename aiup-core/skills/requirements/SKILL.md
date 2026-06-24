@@ -64,7 +64,7 @@ Define limitations and boundaries imposed on the solution.
 
 ## Reference
 
-See [REFERENCE.md](REFERENCE.md) for ID prefixes, priority levels, status values, NFR categories, and constraint
+See [references/REFERENCE.md](references/REFERENCE.md) for ID prefixes, priority levels, status values, NFR categories, and constraint
 categories.
 
 ## Requirement Quality Checks

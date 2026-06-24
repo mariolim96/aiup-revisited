@@ -25,7 +25,7 @@ Create or update use case specification documents for $ARGUMENTS in `docs/use_ca
 
 ## Template
 
-Use [templates/use-case.md](templates/use-case.md) as the document structure, and
+Use [references/use-case.md](references/use-case.md) as the document structure, and
 see [references/example.md](references/example.md) for a complete worked example.
 
 ## Workflow

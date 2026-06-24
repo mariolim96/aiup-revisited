@@ -119,7 +119,7 @@ Create test data using Flyway migrations in `src/test/resources/db/migration`.
 
 ## Template
 
-Use [templates/UC001ManagePersonsTest.java](templates/UC001ManagePersonsTest.java) as the test
+Use [references/UC001ManagePersonsTest.java](references/UC001ManagePersonsTest.java) as the test
 class structure. It demonstrates the `UC<id><Name>Test` class naming, the `@UseCase` annotation on
 every test method, and how to map alternative flows (`scenario = "A1: …"`) and business rules
 (`businessRules = {"BR-…"}`) onto the spec headings.
