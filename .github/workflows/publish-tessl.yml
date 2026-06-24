@@ -63,7 +63,7 @@ jobs:
             # eval to attach the Impact score. --with-scenario-quality-check
             # drops misleading/errored scenarios so a single empty agent run
             # can't tank the average.
-            tessl plugin publish --with-scenario-quality-check "./$dir"
+            tessl plugin publish "./$dir"
           elif echo "$out" | grep -q "already exists"; then
             echo "::notice::$dir version already published — skipping"
           else
