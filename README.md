@@ -21,12 +21,13 @@ Construction, Transition** — but adapted for AI-driven workflows.
 ## AIUP Workflow
 
 ```
-Analysis           Inception          Elaboration                                      Construction                                                       Management
-─────────────────  ─────────────────  ──────────────────────────────────────────────   ─────────────────────────────────────────────────────────────────  ───────────────────────────────
-/forge-idea    →   /requirements  →   /entity-model  →  /use-case-diagram  →           /use-case-spec  →  /flyway-migration                           →   /sprint-planning
-/product-brief                        /create-architecture                             (UX Design)     ↘  /atdd-backend   → /implement-backend          /create-tickets
+Analysis           Inception          Elaboration                                      Construction                                                       Management                      Review & Transition
+─────────────────  ─────────────────  ──────────────────────────────────────────────   ─────────────────────────────────────────────────────────────────  ─────────────────────────────── ──────────────────────────────
+/forge-idea    →   /requirements  →   /entity-model  →  /use-case-diagram  →           /use-case-spec  →  /flyway-migration                           →   /sprint-planning           →    /auto-review-loop
+/product-brief                        /create-architecture                             (UX Design)     ↘  /atdd-backend   → /implement-backend          /create-tickets                 /check-pr
 /prfaq                                /ux-design                                                       ↘  /atdd-frontend  → /implement-frontend ↘       /correct-course
-                                                                                                                                             /atdd-integration  /retrospective
+                                                                                                                                             /atdd-integration  /generate-project-context
+                                                                                                                                                              /retrospective
 ```
 
 Each skill picks up where the previous one left off using the files produced along the way (`docs/vision.md`,
@@ -37,10 +38,10 @@ inspect or manually edit these files before continuing.
 schema and produces the same `docs/use_cases.puml`, `docs/use_cases/UC-*.md`, and `docs/entity_model.md` artifacts the
 forward workflow would have produced, giving you a documented baseline to work from.
 
-|                      | Analysis | Inception       | Elaboration                            | Construction                                                                | Management |
-|----------------------|----------|-----------------|----------------------------------------|-----------------------------------------------------------------------------|------------|
-| **aiup-core**        | `/forge-idea`<br>`/product-brief`<br>`/prfaq` | `/requirements` | `/create-architecture`<br>`/ux-design`<br>`/entity-model`<br>`/use-case-diagram` | `/use-case-spec` | `/sprint-planning`<br>`/create-tickets`<br>`/generate-project-context`<br>`/correct-course`<br>`/retrospective` |
-| **aiup-vaadin-jooq** |          |                 |                                        | `/flyway-migration`<br>`/atdd-backend`<br>`/implement-backend`<br>`/atdd-frontend`<br>`/implement-frontend`<br>`/atdd-integration` |            |
+|                      | Analysis | Inception       | Elaboration                            | Construction                                                                | Management | Review & Transition |
+|----------------------|----------|-----------------|----------------------------------------|-----------------------------------------------------------------------------|------------|---------------------|
+| **aiup-core**        | `/forge-idea`<br>`/product-brief`<br>`/prfaq` | `/requirements` | `/create-architecture`<br>`/ux-design`<br>`/entity-model`<br>`/use-case-diagram` | `/use-case-spec` | `/sprint-planning`<br>`/create-tickets`<br>`/generate-project-context`<br>`/correct-course`<br>`/retrospective` | `/auto-review-loop`<br>`/check-pr` |
+| **aiup-vaadin-jooq** |          |                 |                                        | `/flyway-migration`<br>`/atdd-backend`<br>`/implement-backend`<br>`/atdd-frontend`<br>`/implement-frontend`<br>`/atdd-integration` |            |                     |
 
 ---
 

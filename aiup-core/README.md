@@ -39,16 +39,19 @@ written along the way, so you can inspect or edit any artifact before continuing
 | Management   | `/generate-project-context`| Scan existing codebase to establish rules for the implementation phase |
 | Management   | `/correct-course`     | Pivot requirements safely mid-implementation to maintain traceability    |
 | Management   | `/retrospective`      | Analyze implementation learnings and update project context rules        |
+| Review       | `/auto-review-loop`   | Perform an autonomous self-review loop before opening a PR               |
+| Review       | `/check-pr`           | Manage a Pull Request via `gh` CLI (fix feedback, resolve comments)      |
 | Any          | `/reverse-engineer`   | Recover use case diagram, use case specs, and entity model from existing code |
 
 ### Workflow
 
 ```
-Analysis           Inception          Elaboration                                      Construction          Management
-─────────────────  ─────────────────  ──────────────────────────────────────────────   ─────────────────     ───────────────────────────────
-/forge-idea    →   /requirements  →   /entity-model  →  /use-case-diagram  →           /use-case-spec   →    /sprint-planning
-/product-brief                        /create-architecture                             (UX Design)           /create-tickets
+Analysis           Inception          Elaboration                                      Construction          Management                      Review
+─────────────────  ─────────────────  ──────────────────────────────────────────────   ─────────────────     ─────────────────────────────── ──────────────────────────────
+/forge-idea    →   /requirements  →   /entity-model  →  /use-case-diagram  →           /use-case-spec   →    /sprint-planning           →    /auto-review-loop
+/product-brief                        /create-architecture                             (UX Design)           /create-tickets                 /check-pr
 /prfaq                                /ux-design                                                             /correct-course
+                                                                                                             /generate-project-context
                                                                                                              /retrospective
 ```
 
