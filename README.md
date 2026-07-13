@@ -45,17 +45,6 @@ forward workflow would have produced, giving you a documented baseline to work f
 
 ---
 
-## How to Use
-
-The AI Unified Process is designed to be followed sequentially. Here is the typical day-to-day workflow:
-
-1. **Start from an Idea**: Run `/forge-idea` to clarify your thoughts, then `/requirements` to generate a structured requirements catalog from your vision.
-2. **Design the System**: Run `/entity-model` and `/use-case-diagram` to map out the data and the actors. Then detail the behavior with `/use-case-spec`.
-3. **Plan the Work**: Use `/sprint-planning` to organize the specs into an actionable sprint, and `/create-tickets` to generate tickets in your issue tracker.
-4. **Implement Incrementally**: When assigned a ticket, run `/resolve-ticket`. The agent will break the work into vertical slices and test each slice atomatically.
-   - For full-stack features, it may leverage the split-team skills (`/atdd-backend` → `/implement-backend` and `/atdd-frontend` → `/implement-frontend`).
-5. **Review and Merge**: Before opening a Pull Request, run `/auto-review-loop` to perform a rigorous self-review against the Use Case specs. Once the PR is open, use `/check-pr` to automatically fix reviewer feedback and resolve comments.
-
 ---
 
 ## Prerequisites
@@ -319,45 +308,67 @@ are derived from the entity model. Run `mvn flyway:migrate` to apply.
 
 ---
 
-### Step 6 — Implement the use case
+### Step 6 — Plan and Create Tickets
 
 ```
-/implement UC-001
+/sprint-planning
+/create-tickets
 ```
 
-Claude reads the use case spec, the entity model, and existing code to learn your conventions, then implements the data
-access layer with jOOQ and the UI with Vaadin. It compiles after each layer and stops on errors. It does **not** write
-tests — those have dedicated skills.
+Claude reads the use case specs and generates an organized sprint plan and actionable tickets for your issue tracker.
 
 ---
 
-### Step 7 — Write Browserless unit tests
+### Step 7 — Resolve the ticket incrementally
 
 ```
-/browserless-test UC-001
+/resolve-ticket TICKET-123
 ```
 
-Claude generates server-side Vaadin tests using the official **Vaadin Browserless** framework
-(`com.vaadin:browserless-test-junit6`) — no browser required. Tests cover navigation, component interactions, form
-validation, grid operations, and notifications. Test data is seeded via Flyway migrations under
-`src/test/resources/db/migration`; transaction boundaries are preserved (no `@Transactional` on tests).
-
-> Browserless Testing is free and open source under Apache 2.0 since Vaadin 25.1. It is the official successor to UI
-> Unit Testing (formerly part of the commercial TestBench) and replaces the community Karibu Testing library as the
-> recommended server-side testing approach. The legacy `/karibu-test` skill is still installed for existing projects
-> but is **no longer recommended** for new code — use `/browserless-test`.
+Claude acts as the developer picking up the ticket. It reads the Use Case, plans vertical slices, and drives the implementation loop. For a Vaadin/jOOQ project, it leverages the following track-specific skills:
 
 ---
 
-### Step 8 — Write Playwright integration tests
+### Step 8 — Backend Track (ATDD & Implementation)
 
 ```
-/playwright-test UC-001
+/atdd-backend UC-001
+/implement-backend UC-001
 ```
 
-Claude generates browser-based end-to-end tests against the running application (default: `http://localhost:8080`) using
-the Drama Finder library for type-safe, accessibility-first element wrappers. Tests are written black-box — they do not
-look at the implementation — and never use raw Playwright locators or `Thread.sleep()`.
+The Backend team writes a failing JUnit 5 integration test against the domain inbound ports, then implements the jOOQ adapters and domain logic to make it pass.
+
+---
+
+### Step 9 — Frontend Track (ATDD & Implementation)
+
+```
+/atdd-frontend UC-001
+/implement-frontend UC-001
+```
+
+The Frontend team writes a failing Vaadin Browserless test mocking the backend ports, then builds the Vaadin UI views to make the test pass.
+
+---
+
+### Step 10 — Integration & Review
+
+```
+/atdd-integration UC-001
+/auto-review-loop
+```
+
+Once merged, generate Playwright E2E tests to validate the full slice. Before opening the Pull Request, run the autonomous self-review loop to ensure compliance with the original `UC-001` specs.
+
+---
+
+### Step 11 — Manage the Pull Request
+
+```
+/check-pr
+```
+
+Use the GitHub CLI to automatically read reviewer feedback and fix the codebase to resolve PR threads.
 
 ---
 
