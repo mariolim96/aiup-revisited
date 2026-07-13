@@ -33,7 +33,8 @@ written along the way, so you can inspect or edit any artifact before continuing
 | Elaboration  | `/ux-design`          | Design UI layouts and component wireframes for use cases                 |
 | Elaboration  | `/entity-model`       | Create an entity model with a Mermaid ER diagram and attribute tables    |
 | Elaboration  | `/use-case-diagram`   | Generate a PlantUML use case diagram mapping actors to use cases         |
-| Construction | `/use-case-spec`      | Write detailed use case specifications (flows, pre/postconditions, rules)|
+| Construction | `/use-case-spec`      | Write detailed specifications for a given use case from the diagram      |
+| Construction | `/resolve-ticket`     | Implement a ticket incrementally in vertical slices with atomic commits    |
 | Management   | `/create-tickets`     | Convert use case specs into actionable issue tracker tickets             |
 | Management   | `/sprint-planning`    | Organize use cases into a sprint tracking board                          |
 | Management   | `/generate-project-context`| Scan existing codebase to establish rules for the implementation phase |
@@ -50,7 +51,7 @@ Analysis           Inception          Elaboration                               
 ─────────────────  ─────────────────  ──────────────────────────────────────────────   ─────────────────     ─────────────────────────────── ──────────────────────────────
 /forge-idea    →   /requirements  →   /entity-model  →  /use-case-diagram  →           /use-case-spec   →    /sprint-planning           →    /auto-review-loop
 /product-brief                        /create-architecture                             (UX Design)           /create-tickets                 /check-pr
-/prfaq                                /ux-design                                                             /correct-course
+/prfaq                                /ux-design                                       /resolve-ticket       /correct-course
                                                                                                              /generate-project-context
                                                                                                              /retrospective
 ```
