@@ -21,12 +21,12 @@ Construction, Transition** — but adapted for AI-driven workflows.
 ## AIUP Workflow
 
 ```
-Inception          Elaboration                          Construction
-─────────────────  ──────────────────────────────────   ────────────────────────────────────────────────
-/requirements  →  /entity-model  →  /use-case-diagram  →  /use-case-spec  →  /flyway-migration
-                                                                          ↘  /implement
-                                                                          ↘  /browserless-test
-                                                                          ↘  /playwright-test
+Analysis           Inception          Elaboration                                      Construction                                                       Management
+─────────────────  ─────────────────  ──────────────────────────────────────────────   ─────────────────────────────────────────────────────────────────  ───────────────────────────────
+/forge-idea    →   /requirements  →   /entity-model  →  /use-case-diagram  →           /use-case-spec  →  /flyway-migration                           →   /sprint-planning
+/product-brief                        /create-architecture                             (UX Design)     ↘  /atdd-backend   → /implement-backend          /create-tickets
+/prfaq                                /ux-design                                                       ↘  /atdd-frontend  → /implement-frontend ↘       /correct-course
+                                                                                                                                             /atdd-integration  /retrospective
 ```
 
 For an Angular/JPA project, the inception and elaboration parts look the same, as they are part of the aiup-
@@ -69,12 +69,10 @@ inspect or manually edit these files before continuing.
 schema and produces the same `docs/use_cases.puml`, `docs/use_cases/UC-*.md`, and `docs/entity_model.md` artifacts the
 forward workflow would have produced, giving you a documented baseline to work from.
 
-|                         | Inception       | Elaboration                            | Construction                                                                                       | Transition |
-|-------------------------|-----------------|----------------------------------------|----------------------------------------------------------------------------------------------------|------------|
-| **aiup-core**           | `/requirements` | `/entity-model`<br>`/use-case-diagram` | `/use-case-spec`<br>`/test-case`                                                                   |            |
-| **aiup-vaadin-jooq**    |                 |                                        | `/flyway-migration`<br>`/implement`<br>`/browserless-test`<br>`/playwright-test`                   |            |
-| **aiup-angular-jpa**    |                 |                                        | `/flyway-migration`<br>`/implement`<br>`/spring-boot-test`<br>`/vitest-test`<br>`/playwright-test` |            |
-| **aiup-blazor-dotnet**  |                 |                                        | `/ef-migration`<br>`/implement`<br>`/bunit-test`<br>`/dotnet-test`<br>`/playwright-test`          |            |
+|                      | Inception       | Elaboration                            | Construction                                                                | Transition |
+|----------------------|-----------------|----------------------------------------|-----------------------------------------------------------------------------|------------|
+| **aiup-core**        | `/requirements` | `/entity-model`<br>`/use-case-diagram` | `/use-case-spec`                                                            |            |
+| **aiup-vaadin-jooq** |                 |                                        | `/flyway-migration`<br>`/implement`<br>`/browserless-test`<br>`/playwright-test` |            |
 
 ---
 
@@ -1142,6 +1140,11 @@ and documentation. The plugins in this marketplace ship with the following serve
 | **Vaadin**         | `aiup-vaadin-jooq`                                            | Vaadin component and framework documentation       |
 | **KaribuTesting**  | `aiup-vaadin-jooq`                                            | Karibu testing framework documentation             |
 | **jOOQ**           | `aiup-vaadin-jooq`                                            | jOOQ DSL and code generation reference             |
+| **JavaDocs**       | `aiup-vaadin-jooq`, `aiup-angular-jpa`                        | Java API documentation lookup                      |
+| **MicrosoftLearn** | `aiup-blazor-dotnet`                                          | .NET, Blazor, and EF Core documentation lookup     |
+| **bUnitDocs**      | `aiup-blazor-dotnet`                                          | bUnit component testing documentation              |
+| **Playwright**     | `aiup-vaadin-jooq`, `aiup-angular-jpa`, `aiup-blazor-dotnet`  | Browser automation for integration tests           |
+                    | jOOQ DSL and code generation reference             |
 | **JavaDocs**       | `aiup-vaadin-jooq`, `aiup-angular-jpa`                        | Java API documentation lookup                      |
 | **MicrosoftLearn** | `aiup-blazor-dotnet`                                          | .NET, Blazor, and EF Core documentation lookup     |
 | **bUnitDocs**      | `aiup-blazor-dotnet`                                          | bUnit component testing documentation              |
