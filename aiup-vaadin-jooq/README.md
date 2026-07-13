@@ -23,18 +23,22 @@ Each skill is also available as a slash command.
 | Phase        | Skill / command       | Description                                                              |
 |--------------|-----------------------|--------------------------------------------------------------------------|
 | Construction | `/flyway-migration`   | Create versioned Flyway migration scripts (`V*.sql`) from the entity model |
-| Construction | `/implement`          | Implement use cases as Vaadin views/forms/grids plus jOOQ data access    |
-| Construction | `/browserless-test`   | Create Vaadin Browserless server-side unit tests (recommended)           |
-| Construction | `/karibu-test`        | Create Karibu server-side unit tests (legacy — superseded since Vaadin 25.1) |
-| Construction | `/playwright-test`    | Create Playwright browser-based integration tests (Drama Finder)         |
+| Construction | `/atdd-backend`       | Write failing JUnit tests for the backend Use Case domain ports          |
+| Construction | `/implement-backend`  | Implement the backend domain logic, ports, and jOOQ adapters             |
+| Construction | `/atdd-frontend`      | Write failing Browserless tests mocking the backend ports                |
+| Construction | `/implement-frontend` | Implement Vaadin UI and bind to the backend ports                        |
+| Construction | `/atdd-integration`   | Create Playwright browser-based integration tests for full E2E           |
 
 ### Workflow
 
 ```
-Construction
-────────────────────────────────────────────────────
-/flyway-migration  →  /implement  →  /browserless-test
-                                  ↘  /playwright-test
+Construction (Split Teams)
+───────────────────────────────────────────────────────────────────────────
+(DB)    /flyway-migration
+                ↘
+(BE)             /atdd-backend  →  /implement-backend
+                                                      ↘
+(FE)             /atdd-frontend →  /implement-frontend  →  /atdd-integration
 ```
 
 These skills read the AIUP artifacts under `docs/` (`docs/entity_model.md`, `docs/use_cases/UC-*.md`) produced by

@@ -21,12 +21,12 @@ Construction, Transition** — but adapted for AI-driven workflows.
 ## AIUP Workflow
 
 ```
-Inception          Elaboration                          Construction
-─────────────────  ──────────────────────────────────   ────────────────────────────────────────────────
-/requirements  →  /entity-model  →  /use-case-diagram  →  /use-case-spec  →  /flyway-migration
-                                                                          ↘  /implement
-                                                                          ↘  /browserless-test
-                                                                          ↘  /playwright-test
+Analysis           Inception          Elaboration                                      Construction                                                       Management
+─────────────────  ─────────────────  ──────────────────────────────────────────────   ─────────────────────────────────────────────────────────────────  ───────────────────────────────
+/forge-idea    →   /requirements  →   /entity-model  →  /use-case-diagram  →           /use-case-spec  →  /flyway-migration                           →   /sprint-planning
+/product-brief                        /create-architecture                             (UX Design)     ↘  /atdd-backend   → /implement-backend          /create-tickets
+/prfaq                                /ux-design                                                       ↘  /atdd-frontend  → /implement-frontend ↘       /correct-course
+                                                                                                                                             /atdd-integration  /retrospective
 ```
 
 Each skill picks up where the previous one left off using the files produced along the way (`docs/vision.md`,
@@ -37,10 +37,10 @@ inspect or manually edit these files before continuing.
 schema and produces the same `docs/use_cases.puml`, `docs/use_cases/UC-*.md`, and `docs/entity_model.md` artifacts the
 forward workflow would have produced, giving you a documented baseline to work from.
 
-|                      | Inception       | Elaboration                            | Construction                                                                | Transition |
-|----------------------|-----------------|----------------------------------------|-----------------------------------------------------------------------------|------------|
-| **aiup-core**        | `/requirements` | `/entity-model`<br>`/use-case-diagram` | `/use-case-spec`                                                            |            |
-| **aiup-vaadin-jooq** |                 |                                        | `/flyway-migration`<br>`/implement`<br>`/browserless-test`<br>`/playwright-test` |            |
+|                      | Analysis | Inception       | Elaboration                            | Construction                                                                | Management |
+|----------------------|----------|-----------------|----------------------------------------|-----------------------------------------------------------------------------|------------|
+| **aiup-core**        | `/forge-idea`<br>`/product-brief`<br>`/prfaq` | `/requirements` | `/create-architecture`<br>`/ux-design`<br>`/entity-model`<br>`/use-case-diagram` | `/use-case-spec` | `/sprint-planning`<br>`/create-tickets`<br>`/generate-project-context`<br>`/correct-course`<br>`/retrospective` |
+| **aiup-vaadin-jooq** |          |                 |                                        | `/flyway-migration`<br>`/atdd-backend`<br>`/implement-backend`<br>`/atdd-frontend`<br>`/implement-frontend`<br>`/atdd-integration` |            |
 
 ---
 

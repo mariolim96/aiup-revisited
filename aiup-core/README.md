@@ -25,18 +25,31 @@ written along the way, so you can inspect or edit any artifact before continuing
 
 | Phase        | Skill / command       | Description                                                              |
 |--------------|-----------------------|--------------------------------------------------------------------------|
+| Analysis     | `/product-brief`      | Generate a product brief `docs/vision.md` from a raw idea                |
+| Analysis     | `/forge-idea`         | Pressure-test a vague concept to produce a hardened `docs/vision.md`     |
+| Analysis     | `/prfaq`              | Write a Press Release and FAQ to shape product vision `docs/vision.md`   |
 | Inception    | `/requirements`       | Generate a structured requirements catalog (user stories, NFRs, constraints) from `docs/vision.md` |
+| Elaboration  | `/create-architecture`| Define tech stack, folder structure, and API patterns in `docs/architecture.md` |
+| Elaboration  | `/ux-design`          | Design UI layouts and component wireframes for use cases                 |
 | Elaboration  | `/entity-model`       | Create an entity model with a Mermaid ER diagram and attribute tables    |
 | Elaboration  | `/use-case-diagram`   | Generate a PlantUML use case diagram mapping actors to use cases         |
 | Construction | `/use-case-spec`      | Write detailed use case specifications (flows, pre/postconditions, rules)|
+| Management   | `/create-tickets`     | Convert use case specs into actionable issue tracker tickets             |
+| Management   | `/sprint-planning`    | Organize use cases into a sprint tracking board                          |
+| Management   | `/generate-project-context`| Scan existing codebase to establish rules for the implementation phase |
+| Management   | `/correct-course`     | Pivot requirements safely mid-implementation to maintain traceability    |
+| Management   | `/retrospective`      | Analyze implementation learnings and update project context rules        |
 | Any          | `/reverse-engineer`   | Recover use case diagram, use case specs, and entity model from existing code |
 
 ### Workflow
 
 ```
-Inception          Elaboration                          Construction
-─────────────────  ──────────────────────────────────   ─────────────────
-/requirements  →  /entity-model  →  /use-case-diagram  →  /use-case-spec
+Analysis           Inception          Elaboration                                      Construction          Management
+─────────────────  ─────────────────  ──────────────────────────────────────────────   ─────────────────     ───────────────────────────────
+/forge-idea    →   /requirements  →   /entity-model  →  /use-case-diagram  →           /use-case-spec   →    /sprint-planning
+/product-brief                        /create-architecture                             (UX Design)           /create-tickets
+/prfaq                                /ux-design                                                             /correct-course
+                                                                                                             /retrospective
 ```
 
 The skills produce and consume a set of artifacts under `docs/`:
