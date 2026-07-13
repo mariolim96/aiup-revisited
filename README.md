@@ -45,6 +45,19 @@ forward workflow would have produced, giving you a documented baseline to work f
 
 ---
 
+## How to Use
+
+The AI Unified Process is designed to be followed sequentially. Here is the typical day-to-day workflow:
+
+1. **Start from an Idea**: Run `/forge-idea` to clarify your thoughts, then `/requirements` to generate a structured requirements catalog from your vision.
+2. **Design the System**: Run `/entity-model` and `/use-case-diagram` to map out the data and the actors. Then detail the behavior with `/use-case-spec`.
+3. **Plan the Work**: Use `/sprint-planning` to organize the specs into an actionable sprint, and `/create-tickets` to generate tickets in your issue tracker.
+4. **Implement Incrementally**: When assigned a ticket, run `/resolve-ticket`. The agent will break the work into vertical slices and test each slice atomatically.
+   - For full-stack features, it may leverage the split-team skills (`/atdd-backend` → `/implement-backend` and `/atdd-frontend` → `/implement-frontend`).
+5. **Review and Merge**: Before opening a Pull Request, run `/auto-review-loop` to perform a rigorous self-review against the Use Case specs. Once the PR is open, use `/check-pr` to automatically fix reviewer feedback and resolve comments.
+
+---
+
 ## Prerequisites
 
 - [Claude Code](https://claude.ai/code) installed and running in your project
