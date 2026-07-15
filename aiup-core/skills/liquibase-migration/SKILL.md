@@ -63,11 +63,19 @@ CREATE TABLE me_documento (
 
 ## Workflow
 
-1. Determine the next sequence number by looking at existing files in `src/main/resources/db/changelog/postgresql/`.
-2. Create the file with the `00X-name.sql` pattern.
-3. Add the `--liquibase formatted sql` header.
-4. Add the `--changeset author:id context:postgresql` header (use a standard author name or ask the user, default to the user's name if known, e.g., `giulio-marra`).
-5. Create table definitions with columns, constraints, and foreign keys.
-6. Order tables so that referenced tables are created before referencing tables.
-7. Write the corresponding `--rollback` statements at the bottom.
-8. Remind the user to include this new file in the main `db.changelog-master.yaml` if it doesn't auto-include files from the directory.
+1. Read `docs/entity_model.md`
+2. Read existing migrations to determine the next version number
+3. Create sequence definitions for each entity **only** if the entity uses numeric IDs. (For UUID primary keys, skip this and use `DEFAULT gen_random_uuid()`).
+4. Create table definitions with columns, constraints, and foreign keys
+5. Order tables so that referenced tables are created before referencing tables
+6. Add Liquibase preconditions (`--precondition-sql-check` or similar) where applicable to make migrations safe and idempotent.
+7. Validate the migration:
+    - Verify all entities from the entity model have corresponding tables
+    - Verify all foreign keys reference tables that are created in the same or earlier migration
+    - Verify sequence names follow the pattern `{table_name}_seq` (if applicable)
+    - Verify the SQL syntax is valid for the target database
+8. Write the corresponding `--rollback` statements at the bottom for every changeset.
+9. Ensure each changeset is atomic; do not bundle unrelated schema changes into a single changeset.
+10. Remind the user to include this new file in the main `db.changelog-master.yaml` if it doesn't auto-include files from the directory.
+
+
