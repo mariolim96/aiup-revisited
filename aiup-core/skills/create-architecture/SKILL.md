@@ -20,6 +20,6 @@ AIUP defines the *what* (requirements, use cases, entity models). This skill def
    - **System Architecture**: High-level diagram (using Mermaid).
    - **Folder Structure**: Where different types of files will live.
    - **API Patterns**: E.g., RESTful conventions, GraphQL.
-   - **Data Access Patterns**: E.g., jOOQ, Hibernate, direct SQL.
+   - **Data Access Patterns**: E.g., ORM, query builder, raw SQL, GraphQL, REST.
 3. **Save**: Save this document to `docs/architecture.md`.
 4. **Handoff**: Instruct the user to continue with AIUP `/use-case-spec` or `/implement`. The `/implement` skill will now have clear architectural guidelines to follow.

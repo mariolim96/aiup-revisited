@@ -14,6 +14,6 @@ Agents should learn from their mistakes. This skill analyzes the code written du
 
 ## Process
 1. **Gather Data**: Ask the user what went well and what went wrong during the last `/implement` cycles. If the user isn't sure, scan recent git commits for bug fixes.
-2. **Identify Learnings**: Distill the problems into actionable rules. (e.g., "We kept failing because jOOQ required X configuration.")
+2. **Identify Learnings**: Distill the problems into actionable rules. (e.g., "We kept failing because the ORM required X configuration." or "Tests were flaky because we didn't seed data correctly.")
 3. **Update Context**: Add these new rules to the `docs/project-context.md` file.
 4. **Handoff**: Explain how these new rules will help the next AIUP `/implement` phase go smoother.

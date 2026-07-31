@@ -28,12 +28,12 @@ Always include an explicit rollback script/statement for every changeset.
 
 ## File Naming Convention
 
-Liquibase versioned migrations in this project follow this naming pattern (e.g., inside `db/changelog/postgresql/`):
+Liquibase versioned migrations follow this naming pattern (e.g., inside `db/changelog/`):
 
 ```
-001-create-me-istanza.sql
-002-create-me-utente-account.sql
-003-create-me-documento.sql
+001-create-user.sql
+002-create-product.sql
+003-create-order.sql
 ```
 
 ## Example Migration
@@ -41,31 +41,29 @@ Liquibase versioned migrations in this project follow this naming pattern (e.g.,
 ```sql
 --liquibase formatted sql
 
---changeset <author>:003-create-me-documento context:postgresql
---comment: UC-003 - creates me_documento table for storing uploaded document metadata
-CREATE TABLE me_documento (
+--changeset <author>:003-create-order
+--comment: UC-003 - creates order table for tracking customer orders
+CREATE TABLE "order" (
     id                  UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    istanza_id          UUID NOT NULL,
-    nome_file_originale VARCHAR(500) NOT NULL,
-    size_bytes          BIGINT,
-    repository          VARCHAR(50),
-    external_id         VARCHAR(200),
-    tipo_documento      VARCHAR(50) NOT NULL,
-    mime_type           VARCHAR(100),
-    file_hash           VARCHAR(256),
-    trascrizione_testo  TEXT,
+    customer_id         UUID NOT NULL,
+    status              VARCHAR(50) NOT NULL DEFAULT 'DRAFT',
+    total_amount        NUMERIC(12, 2),
+    currency            VARCHAR(3) NOT NULL DEFAULT 'EUR',
+    notes               TEXT,
+    created_at          TIMESTAMP NOT NULL DEFAULT now(),
+    updated_at          TIMESTAMP,
     
-    CONSTRAINT fk_me_documento_istanza FOREIGN KEY (istanza_id) REFERENCES me_istanza(id)
+    CONSTRAINT fk_order_customer FOREIGN KEY (customer_id) REFERENCES customer(id)
 );
 
---rollback DROP TABLE me_documento;
+--rollback DROP TABLE "order";
 ```
 
 ## Workflow
 
 1. Read `docs/entity_model.md`
 2. Read existing migrations to determine the next version number
-3. Create sequence definitions for each entity **only** if the entity uses numeric IDs. (For UUID primary keys, skip this and use `DEFAULT gen_random_uuid()`).
+3. Create sequence definitions for each entity **only** if the entity uses numeric IDs. (For UUID primary keys, skip this and use `DEFAULT gen_random_uuid()` or the database's equivalent).
 4. Create table definitions with columns, constraints, and foreign keys
 5. Order tables so that referenced tables are created before referencing tables
 6. Add Liquibase preconditions (`--precondition-sql-check` or similar) where applicable to make migrations safe and idempotent.
@@ -77,5 +75,3 @@ CREATE TABLE me_documento (
 8. Write the corresponding `--rollback` statements at the bottom for every changeset.
 9. Ensure each changeset is atomic; do not bundle unrelated schema changes into a single changeset.
 10. Remind the user to include this new file in the main `db.changelog-master.yaml` if it doesn't auto-include files from the directory.
-
-
